@@ -2,400 +2,867 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>WandaVision</title>
+  <title>20th Century Fox Animation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Stream all Warner Bros. Animation movies including DC Universe animated films and Mortal Kombat Legends.">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom, #000000, #1a1a2e);
+      min-height: 100vh;
+      transition: background 0.3s ease;
     }
-    ::-webkit-scrollbar-track {
-      background: #111;
+    body.light-mode {
+      background: linear-gradient(to bottom, #f3f4f6, #e5e7eb);
+      color: #111827;
     }
-    ::-webkit-scrollbar-thumb {
-      background: #ffcc00;
-      border-radius: 4px;
+    .episode-card:hover .play-icon {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.1);
     }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #ffdd33;
-    }
-    
-    /* Custom animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .fade-in {
-      animation: fadeIn 0.5s ease-out forwards;
-    }
-    
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
-    .delay-4 { animation-delay: 0.4s; }
-    .delay-5 { animation-delay: 0.5s; }
-    
-    /* Glow effect */
-    .glow-effect {
-      position: relative;
-    }
-    
-    .glow-effect::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-radius: 12px;
-      box-shadow: 0 0 15px rgba(255, 204, 0, 0);
-      transition: box-shadow 0.3s ease;
-      pointer-events: none;
-    }
-    
-    .glow-effect:hover::after {
-      box-shadow: 0 0 15px rgba(255, 204, 0, 0.7);
-    }
-    
-    /* Gradient text */
     .gradient-text {
-      background: linear-gradient(90deg, #ffcc00, #ff9900);
+      background: linear-gradient(90deg, #0077ff 0%, #00ccff 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
-    
-    /* Responsive adjustments */
-    @media (max-width: 640px) {
-      .movie-card {
-        width: calc(50% - 1rem);
+    .modal-enter {
+      animation: modalEnter 0.3s ease-out forwards;
+    }
+    @keyframes modalEnter {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
       }
     }
-    
-    @media (max-width: 400px) {
-      .movie-card {
-        width: 100%;
-      }
+    .showcase-header {
+      background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%), 
+                  url('https://m.media-amazon.com/images/M/MV5BMTY5NjI2MjQxMl5BMl5BanBnXkFtZTgwMDA2MzM0NzE@._V1_.jpg') no-repeat center center;
+      background-size: cover;
+      height: 70vh;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+    }
+    .dc-blue {
+      background-color: #0077ff;
+    }
+    .dc-blue:hover {
+      background-color: #0066dd;
+    }
+    .search-container {
+      transition: all 0.3s ease;
+    }
+    .search-container.focused {
+      box-shadow: 0 0 0 3px rgba(0, 119, 255, 0.3);
+    }
+    .filter-btn {
+      border: 1px solid #374151;
+      border-radius: 9999px;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+      background-color: #1f2937;
+      color: #9ca3af;
+    }
+    .filter-btn:hover {
+      background-color: #374151;
+      color: white;
+    }
+    .filter-btn.active {
+      background-color: #0077ff;
+      color: white;
+      border-color: #0077ff;
+    }
+    .light-mode .filter-btn {
+      background-color: #e5e7eb;
+      color: #4b5563;
+      border-color: #d1d5db;
+    }
+    .light-mode .filter-btn:hover {
+      background-color: #d1d5db;
+    }
+    .light-mode .filter-btn.active {
+      background-color: #0077ff;
+      color: white;
+    }
+    .light-mode .episode-card {
+      background-color: white;
+      color: #111827;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .light-mode .text-gray-300 {
+      color: #4b5563;
+    }
+    .light-mode .text-gray-400 {
+      color: #6b7280;
+    }
+    .light-mode .bg-gray-900 {
+      background-color: #f3f4f6;
+    }
+    .light-mode .bg-gray-800 {
+      background-color: #e5e7eb;
+    }
+    .light-mode .border-gray-800 {
+      border-color: #d1d5db;
+    }
+    .glow-text {
+      text-shadow: 0 0 8px rgba(0, 119, 255, 0.6);
+    }
+    .category-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .category-dc {
+      background-color: rgba(0, 119, 255, 0.2);
+      color: #0077ff;
+    }
+    .category-batman {
+      background-color: rgba(0, 0, 0, 0.2);
+      color: #000000;
+    }
+    .category-superman {
+      background-color: rgba(255, 0, 0, 0.2);
+      color: #ff0000;
+    }
+    .category-justice {
+      background-color: rgba(75, 85, 99, 0.2);
+      color: #4b5563;
+    }
+    .category-other {
+      background-color: rgba(156, 163, 175, 0.2);
+      color: #9ca3af;
+    }
+    .play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: all 0.3s ease;
+      background-color: rgba(0, 119, 255, 0.8);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+    }
+    #player-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 100;
+      display: none;
+    }
+    #player-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    #close-player {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 101;
     }
   </style>
 </head>
 <body class="bg-black text-gray-100 min-h-screen">
-  <!-- Header -->
-  <header class="sticky top-0 z-50 bg-black bg-opacity-90 backdrop-blur-sm border-b border-yellow-600/20">
-    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-      <div class="flex items-center space-x-2">
-        <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
-          <i class="fas fa-shield-alt text-black text-xl"></i>
-        </div>
-        <h1 class="text-2xl font-bold gradient-text">WandaVision</h1>
-      </div>
-      
-      <div class="flex items-center space-x-4">
-        <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-800 transition">
-          <i class="fas fa-moon text-yellow-500"></i>
-        </button>
-        <button id="search-btn" class="p-2 rounded-full hover:bg-gray-800 transition">
-          <i class="fas fa-search text-yellow-500"></i>
-        </button>
-      </div>
-    </div>
-    
-    <!-- Search Bar (hidden by default) -->
-    <div id="search-bar" class="hidden px-4 pb-4">
-      <div class="relative">
-        <input type="text" placeholder="Search episodes..." 
-               class="w-full bg-gray-900 border border-yellow-600/30 rounded-full py-2 px-4 pl-10 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
-        <i class="fas fa-search absolute left-3 top-3 text-yellow-500"></i>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="container mx-auto px-4 py-8">
-    <!-- Hero Section -->
-    <section class="mb-12 relative overflow-hidden rounded-xl">
-      <div class="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent z-10"></div>
-      <img src="https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/2842/1382842-i-4d707ce10bf9" 
-           alt="Mission: Impossible Banner" class="w-full h-64 md:h-96 object-cover">
-      <div class="absolute bottom-0 left-0 z-20 p-6 md:p-8">
-        <h2 class="text-3xl md:text-5xl font-bold mb-2 gradient-text">Marvel Series</h2>
-        <p class="text-gray-300 mb-4 max-w-lg">Blends the style of classic sitcoms with the MCU, in which Wanda Maximoff and Vision - two super-powered beings living their ideal suburban lives - begin to suspect that everything is not as it seems.</p>
-        <div class="flex space-x-3">
-          <button class="bg-yellow-600 hover:bg-yellow-700 text-black font-semibold py-2 px-6 rounded-full transition flex items-center">
-            <i class="fas fa-play mr-2"></i> Play All
-          </button>
-          <button class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-full transition flex items-center">
-            <i class="fas fa-info-circle mr-2"></i> Details
-          </button>
-          </div>
-      </div>
-    </section>
-
-    <!-- Filters -->
-    <div class="flex flex-wrap items-center justify-between mb-8 gap-4">
-      <div class="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
-        <button class="filter-btn active bg-yellow-600 text-black px-4 py-1 rounded-full text-sm font-medium">All</button>
-        <button class="filter-btn bg-gray-800 hover:bg-gray-700 px-4 py-1 rounded-full text-sm font-medium">Sitcom</button>
-        <button class="filter-btn bg-gray-800 hover:bg-gray-700 px-4 py-1 rounded-full text-sm font-medium">Drama</button>
-        <button class="filter-btn bg-gray-800 hover:bg-gray-700 px-4 py-1 rounded-full text-sm font-medium">Sci-Fi</button>
-        <button class="filter-btn bg-gray-800 hover:bg-gray-700 px-4 py-1 rounded-full text-sm font-medium">Superhero</button>
-      </div>
-      
-      <div class="flex items-center space-x-2">
-        <span class="text-gray-400 text-sm">Sort by:</span>
-        <select class="bg-gray-900 border border-gray-700 text-white text-sm rounded-full px-3 py-1 focus:outline-none focus:ring-1 focus:ring-yellow-500">
-          <option>Release Date</option>
-          <option>Film Order</option>
-          <option>Popularity</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Episodes Grid -->
-    <section>
-      <h3 class="text-xl font-semibold mb-6 flex items-center">
-        <i class="fas fa-list-ul text-yellow-500 mr-2"></i>
-        Films
-      </h3>
-      
-      <div id="movies" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        <!-- Movie cards will be inserted here by JavaScript -->
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="bg-gray-900 border-t border-gray-800 mt-12 py-8">
-    <div class="container mx-auto px-4">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="mb-4 md:mb-0">
-          <div class="flex items-center space-x-2">
-            <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-              <i class="fas fa-shield-alt text-black text-sm"></i>
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-black to-gray-900 py-6 px-4 shadow-lg border-b border-yellow-500">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-4 md:mb-0">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Warner_Bros_logo.svg/1965px-Warner_Bros_logo.svg.png" 
+                     alt="Warner Bros. Logo" 
+                     class="h-12 mr-4">
+                <h1 class="text-3xl md:text-4xl font-bold text-yellow-400 glow-text">
+                    Animation
+                </h1>
             </div>
-            <span class="text-xl font-bold gradient-text">WandaVision</span>
-          </div>
-          <p class="text-gray-400 text-sm mt-2">© 2023 Marvel Studios Pictures. All rights reserved.</p>
+            <div class="flex items-center space-x-4">
+              <button id="theme-toggle" class="p-2 rounded-full bg-gray-800 text-gray-300 hover:text-white transition">
+                <i class="fas fa-moon"></i>
+              </button>
+              <div class="search-container relative bg-gray-800 rounded-full px-4 py-2 flex items-center">
+                <i class="fas fa-search text-gray-400 mr-2"></i>
+                <input id="search-input" type="text" placeholder="Search movies..." class="bg-transparent border-none focus:outline-none text-white w-40 md:w-64">
+                <button id="clear-search" class="ml-2 text-gray-400 hover:text-white hidden">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
         </div>
-        
-        <div class="flex space-x-6">
-          <a href="#" class="text-gray-400 hover:text-yellow-500 transition"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="text-gray-400 hover:text-yellow-500 transition"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="text-gray-400 hover:text-yellow-500 transition"><i class="fab fa-instagram"></i></a>
-          <a href="#" class="text-gray-400 hover:text-yellow-500 transition"><i class="fab fa-youtube"></i></a>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+      <!-- Filters -->
+      <div class="mb-8">
+        <div class="flex flex-wrap gap-2 mb-4">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="dc">DC Universe</button>
+          <button class="filter-btn" data-filter="batman">Batman</button>
+          <button class="filter-btn" data-filter="superman">Superman</button>
+          <button class="filter-btn" data-filter="justice">Justice League</button>
+          <button class="filter-btn" data-filter="other">Other</button>
+        </div>
+        <div class="flex items-center">
+          <span class="text-gray-400 mr-2">Sort by:</span>
+          <select id="sort-select" class="bg-gray-800 text-white rounded px-3 py-1 border border-gray-700">
+            <option value="year-desc">Newest First</option>
+            <option value="year-asc">Oldest First</option>
+            <option value="rating-desc">Highest Rated</option>
+            <option value="rating-asc">Lowest Rated</option>
+            <option value="title-asc">A-Z</option>
+            <option value="title-desc">Z-A</option>
+          </select>
         </div>
       </div>
-    </div>
-  </footer>
+      
+      <div id="episodes" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+      
+      <div id="no-results" class="text-center py-12 hidden">
+        <i class="fas fa-film text-5xl text-gray-500 mb-4"></i>
+        <h3 class="text-2xl font-bold text-gray-400">No movies found</h3>
+        <p class="text-gray-500">Try adjusting your search or filters</p>
+      </div>
+    </main>
 
-  <!-- Playback Modal (hidden by default) -->
-  <div id="playback-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-90">
-    <div class="relative w-full max-w-4xl bg-gray-900 rounded-xl overflow-hidden">
-      <button id="close-modal" class="absolute top-4 right-4 z-50 text-white hover:text-yellow-500 text-2xl">
+  <!-- Modal for MP4 videos -->
+  <div id="playback-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-90">
+    <div class="relative w-full max-w-4xl bg-gray-900 rounded-xl overflow-hidden modal-enter">
+      <button id="close-modal" class="absolute top-4 right-4 z-50 text-white hover:text-blue-400 text-2xl transition">
         <i class="fas fa-times"></i>
       </button>
       <div class="aspect-w-16 aspect-h-9">
-        <video id="modal-video" class="w-full" controls>
-          Your browser does not support the video tag.
-        </video>
+        <video id="modal-video" class="w-full" controls poster="https://m.media-amazon.com/images/M/MV5BMTY5NjI2MjQxMl5BMl5BanBnXkFtZTgwMDA2MzM0NzE@._V1_.jpg"></video>
       </div>
       <div class="p-6">
-        <h3 id="modal-title" class="text-2xl font-bold mb-2"></h3>
-        <div class="flex items-center text-gray-400 text-sm mb-4">
-          <span class="mr-4">Film <span id="episode-num"></span></span>
-          <span>Runtime</span>
+        <div class="flex justify-between items-start mb-4">
+          <div>
+            <h3 id="modal-title" class="text-2xl font-bold mb-1 text-white"></h3>
+            <div class="text-gray-400 text-sm">
+              <span id="modal-category" class="category-badge px-2 py-0.5 rounded-full text-xs"></span> • <span id="episode-num"></span> • <span id="modal-runtime"></span> • <span class="text-blue-400" id="modal-rating"></span>
+            </div>
+          </div>
+          <div class="flex space-x-3">
+            <button class="text-gray-400 hover:text-white transition">
+              <i class="fas fa-share-alt"></i>
+            </button>
+            <button class="text-gray-400 hover:text-white transition">
+              <i class="fas fa-ellipsis-h"></i>
+            </button>
+          </div>
         </div>
-        <p id="modal-description" class="text-gray-300 mb-6">
-          Loading description...
-        </p>
-        <div class="flex space-x-3">
-          <button class="bg-yellow-600 hover:bg-yellow-700 text-black font-semibold py-2 px-6 rounded-full transition flex items-center">
+        <p id="modal-description" class="text-gray-300 mb-6"></p>
+        <div class="flex space-x-4">
+          <button id="play-button" class="dc-blue hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-full flex items-center transition transform hover:scale-105">
             <i class="fas fa-play mr-2"></i> Play
           </button>
-          <button class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-full transition flex items-center">
+          <button class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-full flex items-center transition">
             <i class="fas fa-plus mr-2"></i> Watchlist
           </button>
+          <button class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-4 rounded-full transition">
+            <i class="fas fa-thumbs-up"></i>
+          </button>
+        </div>
+        <div class="mt-6 pt-6 border-t border-gray-800">
+          <h4 class="text-sm font-semibold text-gray-400 mb-2">Starring</h4>
+          <p class="text-gray-300 text-sm" id="modal-cast"></p>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Player container for non-MP4 videos -->
+  <div id="player-container">
+    <div id="close-player" class="text-white hover:text-blue-400">
+      <i class="fas fa-times"></i>
+    </div>
+    <iframe id="player-iframe" src="" allowfullscreen></iframe>
+  </div>
+
+  <footer class="bg-gray-900 py-12">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <div class="flex items-center space-x-2 mb-4">
+            <div class="w-10 h-10 dc-blue rounded-full flex items-center justify-center">
+              <i class="fas fa-play text-white"></i>
+            </div>
+            <h1 class="text-xl font-bold text-white">WB<span class="text-blue-400">Animation</span></h1>
+          </div>
+          <p class="text-gray-400 text-sm">© 2024 Warner Bros. Animation</p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div>
+            <h3 class="text-gray-300 font-semibold mb-3">Navigation</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition">Home</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition">Movies</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition">Characters</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition">Gallery</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-gray-300 font-semibold mb-3">Legal</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition">Terms</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition">Privacy</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-blue-400 text-sm transition">Cookies</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-gray-300 font-semibold mb-3">Social</h3>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-facebook"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
   <script>
-    // Movie data
     const movies = [
       { 
-        title: "Filmed Before a Live Studio Audience", 
-        video: "https://macdn.hakunaymatata.com/resource/a8db962b09b9f3f9e88ae1556431bf3a.mp4?Expires=1749464873&Signature=pX-GDuvgwBYDcKjN8KSpF63ayq5Xvya-s6PJ5miB5AKvkq1-bpBSY2-NpQOscLqcC1HcUzmahRIdirOiNDf77FY1biBtzA2gwlTIxW1SfWXgZh~6lg1e5OQFqZkURky9va8fxbu19aXY9DROtGCFdLIb7ppVVi796-2haeQ4CuYzb8eAstLzBjBUSeQ7npGCTRZkD-3PrFy9UnvpzrkmUbMB29VSqZ-zOND4KDLowDoRjQv5lByMKO6afWFN6tPu6vEl-pRH~q~h7VuODw0deRS3ms4sFmd2xcMY54Fxhim3xyGMDwx6cbJeH2-WfEUsCtFFjWxH2C8r3fLwqbwlRA__&Key-Pair-Id=KMHN1LQ1HEUPL", 
-        image: "https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/568/890568-h",
-        description: "Wanda and Vision struggle to conceal their powers during dinner with Vision's boss and his wife.",
-        duration: "26 min"
+        title: "Ice Age", 
+        year: 2002,
+        category: "other",
+        video: "https://macdn.hakunaymatata.com/resource/6985b0dd57c987fd837a96a2dc227e21.mp4?Expires=1750242787&Signature=yZouNpCE6SRZxJeaXoLSY2iSUg92CjuR9WRhtfToq7liD0ROFReSgQQNgRhLBCFajpv9aGHwBy8LA3rODs2YbbZJHvioL4kzWnOLNzxG2C73LIRp0y~t~l2~ipExfKUiIHKMrdkMC0UVbfX2Og89o0e5OgZB6Ip3HNz7~lQoJcPGy4RMw6bHRcrdFfVNKebvuluI8GbbSFbL11Fr8XpibM~sdqUA3Iuqj9JPwm81UqXHRRrsIfxqVUyNogTjzLg9JUs0KifbTne4lr8Vn80M8I404CsERmHG1IlyR~uiZhyQQZsqwujDyKpkwSBGcbnk2GIhbxIkC2zKD9y8Oq1r6g__&Key-Pair-Id=KMHN1LQ1HEUPL", 
+        image: "https://f.woowoowoowoo.net/resize/250x400/c6/59/c6591491f53c848d868589f3844bd965/c6591491f53c848d868589f3844bd965.jpg",
+        runtime: "120 min",
+        rating: "8.5/10",
+        description: "An epic animated fantasy film set in Middle-earth, exploring the history of Rohan and Helm's Deep.",
+        director: "Kenji Kamiyama",
+        cast: "Brian Cox, Miranda Otto, Gaia Wise"
       },
       { 
-        title: "Don't Touch That Dial", 
-        video: "https://vgorigin.hakunaymatata.com/resource/c0d9096687d2ec9621a2ba57cbb63889.mp4?Expires=1749466247&KeyName=wefeed&Signature=_BsiAqTCgr92x8tSe6Fzgk6IM0pk3rLVo5DFWfCNOeoy17hQ49W1Xm80tJZz-TQY_FhNxvpqsPFHz1OwEv3UAA",
-        image: "https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/340/890340-h",
-        description: "In an effort to fit in, Wanda and Vision perform a magic act in their community talent show.",
-        duration: "33 min"
+        title: "Ice Age: The Meltdown", 
+        year: 2006,
+        category: "dc",
+        video: "https://sj3l.ghwillawkni.sbs:443/v4/qu/kf1fp/index-f2-v1-a1.txt", 
+        image: "https://f.woowoowoowoo.net/resize/250x400/2b/24/2b242f24f3ac4fe0cc3b3c293d077fcc/2b242f24f3ac4fe0cc3b3c293d077fcc.jpg",
+        runtime: "90 min",
+        rating: "8.2/10",
+        description: "The first chapter of the animated Watchmen adaptation, bringing the iconic graphic novel to life.",
+        director: "Zack Snyder",
+        cast: "Jeffrey Dean Morgan, Carla Gugino, Jeremy Irons"
       },
       { 
-        title: "Now in Color", 
-        video: "https://macdn.hakunaymatata.com/resource/6111116d004211f9858fd6ed624800f6.mp4?Expires=1749466404&Signature=VWIg0x0PLSFEn8M6Xsgr4Yum0N5WE5dRCIbGSJJBvYdpNyQcrEmrn5oexXqW4aPKdksBxpEUgQl3Ml9Fml5BIBEs~vVtezd20UcPsLKDsrEjo5NsoHfr5nmt5D-eJ5iLF5n5dMw-Es9r97qCVLqdlOYj3-wrbx43r6P3-u7hrVzWjgQ5sy7bN22CnDPsBDy-RcSQVL-vzTdWLg1CJIEdGiZGs0R7EMXZxedMwou6FiCrO8GUrzw1KpxncogIQ5dI1JB974GRjdZ~kVdJ0~Ly3094zhPlrIwSlHvQe~m1tHHf6nZ5uAzJphP0~8uJfbtTwZq5wIAbS4iC6YQPzaHQ-g__&Key-Pair-Id=KMHN1LQ1HEUPL", 
-        image: "https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/333/890333-h",
-        description: "Wanda's pregnancy fritzes her powers as she and Vision prepare for an accelerated delivery.",
-        duration: "30 min"
+        title: "Ice Age: Dawn of the Dinosaurs", 
+        year: 2009,
+        category: "dc",
+        video: "https://macdn.hakunaymatata.com/resource/6a5d569c1fd393adbd76ef9ca034023d.mp4?Expires=1750245289&Signature=p1ALjCkJc5Kn00De6H-QdkhhjEixaTlWmcvrNRIm432bUmSHWifjHRYaR-tQAnmVILdbOGIBHwns9XvePCHZTJRH~w0C2onFJ2b8fxYg9gpZxMyT66u03XXm6I1C1yRrNWFzZ401A-aYVucCoZqc9ROef0jfCcRKVoMH53g515xIVYIsKzh96EXPSHzdDmREz6wSIQbX05d5BDoeDE0Os~vcAgp~KiuSm0ufDv2o2~0nbtrKatujKyHw~RWxtFa~kIRrC1grr9LPawVLKgpQd1vY~f-saUvryvlRqjhVRkAfmxpr2IRuawhJ0p~Vorq3Jh3IyQ5Dxru6~31bJKV-Dg__&Key-Pair-Id=KMHN1LQ1HEUPL", 
+        image: "https://f.woowoowoowoo.net/resize/250x400/4f/da/4fda35201fa5a6c247a5813fa66a7c27/4fda35201fa5a6c247a5813fa66a7c27.jpg",
+        runtime: "89 min",
+        rating: "7.2/10",
+        description: "In an alternate 1985 America, a group of retired superheroes investigate a conspiracy after one of their own is murdered.",
+        director: "Vinton HeuckBrandon & Vietti",
+        cast: "Jeffrey Dean Morgan, Carla Gugino, Jeremy Irons"
       },
       { 
-        title: "We Interrupt This Program", 
-        video: "https://macdn.hakunaymatata.com/resource/3ab676f3b533d81aec75060f694615a7.mp4?Expires=1749466031&Signature=EtSs7VeArHLpyDOjJp4kJzNGsTX0e0cuRzpsT92wylniKMFaLdqD85LjYUxUCZ6Qx6GDt7brbMajdR-JF7TfC3tkOWx0voJt74HRedEwQqXi7BhiRlPPJtHsubjlcRQhvcQVIhpXG8DhwjBEQ8-LUuCO9qMTD4Y6JbOzjmZvPFt~mYVa-OjXCsxy5hmoFchVETKyIKlFZnfxViNdD~TOe47aeqzhVEA07iFM2MBBhYlcwdukSQ7p2yoYmeTldr7lcoloiCej~RCi-ewf3BDt47TKPBx7LWpQySBbC-XWcQJ4bH~bjZvyCsbqzyFDa8mh-hS9JPfW83KSWQCBJEWq1g__&Key-Pair-Id=KMHN1LQ1HEUPL", 
-        image: "https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/6312/896312-h",
-        description: "Monica Rambeau, tasked with a special assignment regarding sentient weapons, goes missing.",
-        duration: "32 min"
+        title: "Ice Age: Continental Drift", 
+        year: 2024,
+        category: "justice",
+        video: "https://sh9f.yevettesha.sbs:443/v4/hz/ualna/index-f1-v1-a1.txt", 
+        image: "https://f.woowoowoowoo.net/resize/250x400/71/96/719613f39bd4da24aee94ce64e77013a/719613f39bd4da24aee94ce64e77013a.jpg",
+        runtime: "85 min",
+        rating: "8.7/10",
+        description: "The Justice League faces their greatest challenge as the multiverse begins to collapse.",
+        director: "Jeff Wamester",
+        cast: "Darren Criss, Jensen Ackles, Stana Katic"
       },
       { 
-        title: "On a Very Special Episode...", 
-        video: "https://macdn.hakunaymatata.com/resource/d686aea8ee5b9b0c8352f36f66b04574.mp4?Expires=1749465271&Signature=bxNI0ER2ezjMqOJ3ff6No8E-ULhthP1qAm1SvKW5fF3~6PfMbfGk1y43MPWdBDGX8dYYAGDbeLhNavYoqBMZXXdZJwr0XYp0t9Sr~8s~xbjmhPt6eEZ6q2FXGOzegRV1Ft9mnz15BVuYzMKOSHyWyZZ8d~iopCAF5Kiqwkqr1wSbt4cCxSOMMqOacUfwdXgTTvyuRV~WSsibLQgEyrko5hlSvLznCbxkWQ6JcL~SzQ8gqsPYfhjlZ8iQqy2pn8~0JQq5yKXFSf1WBTKTNLi5S1kZZxISYt~NnrdFid38p6ATXXnLOM8lmSR7FOVUIuTzI2eN5-mjo-AU6SvG2INqvg__&Key-Pair-Id=KMHN1LQ1HEUPL", 
-        image: "https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/2235/902235-h",
-        description: "Wanda addresses Vision's worries when he grows suspicious of the neighbors' strange behaviour.",
-        duration: "38 min"
+        title: "Ice Age: Collision Course", 
+        year: 2016,
+        category: "batman",
+        video: "https://macdn.hakunaymatata.com/resource/2dc4b8b25b7717a717d4e16374107269.mp4?Expires=1750246659&Signature=Heuf5g~z2h6SyUeOJyvSsmtcy1bXayQ2NpS8hAkaFca6V5nEeu8dhmPYe3UO0NIX1bWwx3w2jXTJYdzlxfB3FIdA0u27St3t93Rr2g8gcU7rp3tzWguThEP0Xym~uquqbDTc3eOCQVzWzY~B7~OEJiP7RHuIIxaMv0ckxKNMHUlTC4UdNtd1N~Lj4Z5KQFuvPtj8I3Ea1inPvXdebzGBAQs0Ei-tZu5MgageLcD59JHKZPjgC~Rhkgspg2pXDejfyGERuHFlcPm3Ez33y6PMrEG-tASxKwI2smi1FHlmOg4zewwUcacWV8YN6IDlC2ECPwac~ZGlk2tfquy9-wEXOg__&Key-Pair-Id=KMHN1LQ1HEUPL", 
+        image: "https://f.woowoowoowoo.net/resize/250x400/5b/6a/5b6a7ee08efe0d91bcd7a9d4b7f6c61b/5b6a7ee08efe0d91bcd7a9d4b7f6c61b.jpg",
+        runtime: "76 min",
+        rating: "8.4/10",
+        description: "Bruce Wayne returns as Batman to save Gotham from a new wave of crime and corruption.",
+        director: "Jay Oliva",
+        cast: "Peter Weller, Ariel Winter, David Selby"
       },
       { 
-        title: "All-New Halloween Spooktacular!", 
-        video: "https://macdn.hakunaymatata.com/resource/c56c82d0118c11ec084f71f6140762c3.mp4?Expires=1749464597&Signature=6BfVVXXyuSQdiekd6~VmUZjl3RgmuAbZM2Di6rCymMyGNGFFDGWfU3TCJ7ubtN1OA2KGsCLB~xnYnOqCscqKo4M0EW2oymyLD-ob3WhSWHFXX26et~yFAN5dDRwo0faKjUB~vcdAp9DgYoAijS6Q0c406DILzStOyXkyYBL2PUhfcVkznFV8rDGUtpkJTCLyHfvP2Ly0nKR79sOn6hYckbhxO6pnXCzNjbTajXk90KMZ9q4ofYD-s-rpEtmRluc-tMeuKJfGwevrpcthufSaYom-SjcCAaD2LZENqrONWJyolYCAgy6UXO0z86cSw-Lhzg7VP2IMm~EobBjr1wn3CQ__&Key-Pair-Id=KMHN1LQ1HEUPL", 
-        image: "https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/7856/907856-h",
-        description: "Disturbances on Halloween separate Wanda from Vision, who looks into anomalous activity in Westview.",
-        duration: "34 min"
+        title: "Ice Age: A Mammoth Christmas", 
+        year: 2011,
+        category: "batman",
+        video: "https://example.com/video5.mp4", 
+        image: "https://f.woowoowoowoo.net/resize/250x400/4c/fe/4cfe58a2acbabf539cbce83758e2baea/4cfe58a2acbabf539cbce83758e2baea.jpg",
+        runtime: "75 min",
+        rating: "8.1/10",
+        description: "Batman faces his greatest failure when a mysterious vigilante known as the Red Hood appears in Gotham.",
+        director: "Brandon Vietti",
+        cast: "Bruce Greenwood, Jensen Ackles, John DiMaggio"
       },
       { 
-        title: "Breaking the Fourth Wall", 
-        video: "https://vgorigin.hakunaymatata.com/resource/9a3158e74e7fdd02dfe0da5a9a897813.mp4?Expires=1749470419&KeyName=wefeed&Signature=9a9zDTbalqdLetCM7TZpuaAT_Z4ZdgD1ZUqr9cWlEg2ABYWLw8aIZQK9Gvy1OWWqE7Ff2J9mqvenZKVfG8G-Cw", 
-        image: "https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/3631/913631-h",
-        description: "Monica plots her return, Wanda navigates unsettling complications, and Vision forms a new alliance.",
-        duration: "34 min"
+        title: "Ice Age: The Great Egg-Scapade", 
+        year: 2016,
+        category: "justice",
+        video: "https://example.com/video6.mp4", 
+        image: "https://f.woowoowoowoo.net/resize/250x400/07/9f/079ffdf4f8be5d5f2db2e2eb83d6f97e/079ffdf4f8be5d5f2db2e2eb83d6f97e.jpg",
+        runtime: "81 min",
+        rating: "8.3/10",
+        description: "The Flash creates a fractured reality where the Justice League never formed and a war rages between Aquaman and Wonder Woman.",
+        director: "Jay Oliva",
+        cast: "Justin Chambers, Kevin McKidd, C. Thomas Howell"
       },
       { 
-        title: "Previously On", 
-        video: "https://vgorigin.hakunaymatata.com/resource/7a22f397e326540cbc4401668558a939.mp4?Expires=1749470751&KeyName=wefeed&Signature=9lBsXZ_jVURy5b1Nu3-obh99-e6bCLt3mGeITiv8eMmLiQ2xD5-xfqBJmBB5Laimk-jNrnSZazvLCZgrnwYUBA",
-        image: "https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/9556/919556-h",
-        description: "Wanda embarks on a troubling journey revisiting her past for insight into her present and future.",
-        duration: "43 min"
+        title: "Justice League: Doom", 
+        year: 2012,
+        category: "justice",
+        video: "https://example.com/video6.mp4", 
+        image: "https://m.media-amazon.com/images/M/MV5BYmIwNjg5NjItZjRmZi00MDVlLThhYmQtNTBmNTRiY2I5Nzg1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+        runtime: "77 min",
+        rating: "7.4/10",
+        description: "Vandal Savage uses information from Batman's secret files in a plot to wipe out the Justice League.",
+        director: "Lauren Montgomery",
+        cast: "Kevin Conroy, Tim Daly, Susan Eisenberg"
       },
       { 
-        title: "The Series Finale", 
-        video: "https://macdn.hakunaymatata.com/resource/825e15708d4424a7a3dd3905d4c12e46.mp4?Expires=1749471098&Signature=ywd3wxx-pd3XXn59hbKRSPFPgCNPmxwV6hUUY9HnIP6Rx2F77ECw1adBchaXYGK4k8gQDs8X78kb2Z4ztS2aAMAwLfHZDHwtNE9SZ3jKsKJt36JKXiYdPCuNW6kPoppSEZiYri5OLPxCpfXn6EOCLg~SCZqdfDTLb95S-wGly5rnFh8PdNt7gLHz0jN-ee3VXLSttljLqb5ipEzzmJmqa5~xZ4aKRLPIocsiZGuiz~pfh7ysbKCBeHFPU9yFwzNe3jaYhQQ6slXPTNubnIN9kReie0289434QTqIXvmQHfyExt3Yhefwwt4uWvd12CNDVK1jgdCraUqEh5mIZsFWLA__&Key-Pair-Id=KMHN1LQ1HEUPL", 
-        image: "https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/5138/925138-h",
-        description: "The events of WandaVision come to a head, and the destinies of all who took part are determined.",
-        duration: "46 min"
+        title: "Batman: The Long Halloween, Part One", 
+        year: 2021,
+        category: "batman",
+        video: "https://example.com/video7.mp4", 
+        image: "https://m.media-amazon.com/images/M/MV5BN2Y1OGU1ZDktYzVhNy00MzQ3LTg1OTMtMmVjMWQzZDAyMDQ0XkEyXkFqcGdeQXVyMTEyMjM2NDc2._V1_.jpg",
+        runtime: "85 min",
+        rating: "8.0/10",
+        description: "Batman, Captain Gordon and District Attorney Harvey Dent team up to bring down the Falcone crime family.",
+        director: "Chris Palmer",
+        cast: "Jensen Ackles, Josh Duhamel, Naya Rivera"
       },
+      { 
+        title: "Batman: The Long Halloween, Part Two", 
+        year: 2021,
+        category: "batman",
+        video: "https://example.com/video8.mp4", 
+        image: "https://m.media-amazon.com/images/M/MV5BZWI1YzU1YzUtYTQ5ZS00YzI0LTk0YjEtN2JlOTI0MDg4ZWI5XkEyXkFqcGdeQXVyMTEyMjM2NDc2._V1_.jpg",
+        runtime: "87 min",
+        rating: "8.1/10",
+        description: "The conclusion of the Long Halloween mystery as Batman races against time to stop Holiday.",
+        director: "Chris Palmer",
+        cast: "Jensen Ackles, Josh Duhamel, Naya Rivera"
+      },
+      { 
+        title: "Superman: Man of Tomorrow", 
+        year: 2020,
+        category: "superman",
+        video: "https://example.com/video9.mp4", 
+        image: "https://m.media-amazon.com/images/M/MV5BNzY3ZDU0YTktYjVjMS00YmM1LThkY2ItOTQ4Y2ExOTFlMDAxXkEyXkFqcGdeQXVyMTEyMjM2NDc2._V1_.jpg",
+        runtime: "86 min",
+        rating: "7.6/10",
+        description: "Clark Kent takes his first steps toward becoming the legendary Man of Steel in this thrilling origin story.",
+        director: "Chris Palmer",
+        cast: "Darren Criss, Zachary Quinto, Alexandra Daddario"
+      },
+      { 
+        title: "Superman: Red Son", 
+        year: 2020,
+        category: "superman",
+        video: "https://example.com/video10.mp4", 
+        image: "https://m.media-amazon.com/images/M/MV5BNzRmN2U1YzItYjQ1Yi00YTVlLWI5ODEtYzIyZTU5MGY5YzBlXkEyXkFqcGdeQXVyMTEyMjM2NDc2._V1_.jpg",
+        runtime: "84 min",
+        rating: "7.8/10",
+        description: "An alternate history of Superman where his ship lands in Soviet Russia instead of Kansas.",
+        director: "Sam Liu",
+        cast: "Jason Isaacs, Amy Acker, Diedrich Bader"
+      },
+      { 
+        title: "Justice League Dark: Apokolips War", 
+        year: 2020,
+        category: "justice",
+        video: "https://example.com/video11.mp4", 
+        image: "https://m.media-amazon.com/images/M/MV5BNzQ2OTk1OTEtNWE0ZS00MWEwLWJhYjQtYjg1NGY0NWNjZDNmXkEyXkFqcGdeQXVyMTEyMjM2NDc2._V1_.jpg",
+        runtime: "90 min",
+        rating: "8.3/10",
+        description: "The Justice League leads a last stand against Darkseid in this epic conclusion to the DCAMU.",
+        director: "Matt Peters",
+        cast: "Jerry O'Connell, Taissa Farmiga, Rosario Dawson"
+      },
+      { 
+        title: "Batman: Hush", 
+        year: 2019,
+        category: "batman",
+        video: "https://example.com/video12.mp4", 
+        image: "https://m.media-amazon.com/images/M/MV5BNWY1N2I1NmItMDY3MS00NzFhLTk0YzQtYjQ3OWYwZjc4YjY1XkEyXkFqcGdeQXVyMTEyMjM2NDc2._V1_.jpg",
+        runtime: "82 min",
+        rating: "7.5/10",
+        description: "Batman faces a mysterious villain known as Hush who seems to know all of his secrets.",
+        director: "Justin Copeland",
+        cast: "Jason O'Mara, Jennifer Morrison, Geoffrey Arend"
+      },
+      { 
+        title: "Reign of the Supermen", 
+        year: 2019,
+        category: "superman",
+        video: "https://example.com/video13.mp4", 
+        image: "https://m.media-amazon.com/images/M/MV5BNzJhMDFkMjQtZDIyNy00YjUwLTk0NTctYzUxN2Q5YzllZDFkXkEyXkFqcGdeQXVyMTEyMjM2NDc2._V1_.jpg",
+        runtime: "87 min",
+        rating: "7.7/10",
+        description: "In the aftermath of Superman's death, four new Supermen emerge to claim his legacy.",
+        director: "Sam Liu",
+        cast: "Jerry O'Connell, Rebecca Romijn, Rainn Wilson"
+      },
+      
+      { 
+        title: "Smallfoot", 
+        year: 2018,
+        video: "https://example.com/video57.mp4", 
+        image: "https://m.media-amazon.com/images/M/MV5BNzU5MjA0OTYzNF5BMl5BanBnXkFtZTgwOTQ1OTIyNDM@._V1_.jpg",
+        runtime: "96 min",
+        rating: "6.6/10",
+        description: "A Yeti is convinced that the elusive creatures known as humans really do exist.",
+        director: "Karey Kirkpatrick",
+        cast: "Channing Tatum, James Corden, Zendaya"
+      },
+      { 
+        title: "Storks", 
+        year: 2016,
+        video: "https://example.com/video58.mp4", 
+        image: "https://m.media-amazon.com/images/M/MV5BNzU5MjA0OTYzNF5BMl5BanBnXkFtZTgwOTQ1OTIyNDM@._V1_.jpg",
+        runtime: "89 min",
+        rating: "6.8/10",
+        description: "Storks have moved on from delivering babies to packages, but an accidental order changes everything.",
+        director: "Nicholas Stoller",
+        cast: "Andy Samberg, Katie Crown, Kelsey Grammer"
+      }
     ];
 
-    // DOM elements
-    const container = document.getElementById('movies');
-    const searchBtn = document.getElementById('search-btn');
-    const searchBar = document.getElementById('search-bar');
+    // DOM Elements
+    const episodesContainer = document.getElementById('episodes');
+    const searchInput = document.getElementById('search-input');
+    const clearSearch = document.getElementById('clear-search');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const sortSelect = document.getElementById('sort-select');
+    const noResults = document.getElementById('no-results');
     const themeToggle = document.getElementById('theme-toggle');
+    const searchContainer = document.querySelector('.search-container');
     const playbackModal = document.getElementById('playback-modal');
     const closeModal = document.getElementById('close-modal');
     const modalVideo = document.getElementById('modal-video');
     const modalTitle = document.getElementById('modal-title');
+    const modalCategory = document.getElementById('modal-category');
+    const modalRuntime = document.getElementById('modal-runtime');
+    const modalRating = document.getElementById('modal-rating');
     const modalDescription = document.getElementById('modal-description');
-    const episodeNum = document.getElementById('episode-num');
+    const modalCast = document.getElementById('modal-cast');
+    const playButton = document.getElementById('play-button');
+    const playerContainer = document.getElementById('player-container');
+    const playerIframe = document.getElementById('player-iframe');
+    const closePlayer = document.getElementById('close-player');
+
+    // Current filter state
+    let currentFilter = 'all';
+    let currentSearch = '';
+    let currentSort = 'year-desc';
 
     // Initialize the page
-    function initPage() {
-      // Create movie cards
-      movies.forEach((movie, index) => {
-        const card = document.createElement('div');
-        card.className = `movie-card fade-in delay-${index % 5} glow-effect`;
-        card.innerHTML = `
-          <div class="relative group overflow-hidden rounded-xl cursor-pointer">
-            <img src="${movie.image}" alt="${movie.title}" 
-                 class="w-full h-48 sm:h-56 md:h-64 object-cover rounded-xl transition duration-500 group-hover:scale-105">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-              <div>
-                <h3 class="text-white font-semibold text-lg">${movie.title}</h3>
-                <p class="text-gray-300 text-sm">${movie.duration}</p>
-              </div>
-            </div>
-            <div class="absolute top-3 right-3 bg-black bg-opacity-70 text-yellow-500 rounded-full w-10 h-10 flex items-center justify-center">
-              <i class="fas fa-play"></i>
-            </div>
-          </div>
-          <div class="mt-3">
-            <h3 class="text-white font-medium">${movie.title}</h3>
-            <div class="flex items-center text-gray-400 text-sm mt-1">
-              <span>Film ${index + 1}</span>
-              <span class="mx-2">•</span>
-              <span>${movie.duration}</span>
-            </div>
-          </div>
-        `;
-        
-        card.addEventListener('click', () => {
-          openModal(movie, index + 1);
-        });
-        
-        container.appendChild(card);
-      });
+    function init() {
+      renderMovies();
+      setupEventListeners();
+    }
 
-      // Filter buttons
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          document.querySelector('.filter-btn.active').classList.remove('active', 'bg-yellow-600', 'text-black');
-          this.classList.add('active', 'bg-yellow-600', 'text-black');
-        });
+    // Render movies based on current filters and search
+    function renderMovies() {
+      episodesContainer.innerHTML = '';
+      
+      let filteredMovies = [...movies];
+      
+      // Apply search filter
+      if (currentSearch) {
+        filteredMovies = filteredMovies.filter(movie => 
+          movie.title.toLowerCase().includes(currentSearch.toLowerCase())
+        );
+      }
+      
+      // Apply category filter
+      if (currentFilter !== 'all') {
+        filteredMovies = filteredMovies.filter(movie => 
+          movie.category === currentFilter
+        );
+      }
+      
+      // Apply sorting
+      filteredMovies.sort((a, b) => {
+        switch(currentSort) {
+          case 'year-desc':
+            return b.year - a.year;
+          case 'year-asc':
+            return a.year - b.year;
+          case 'rating-desc':
+            return parseFloat(b.rating) - parseFloat(a.rating);
+          case 'rating-asc':
+            return parseFloat(a.rating) - parseFloat(b.rating);
+          case 'title-asc':
+            return a.title.localeCompare(b.title);
+          case 'title-desc':
+            return b.title.localeCompare(a.title);
+          default:
+            return 0;
+        }
       });
+      
+      // Display no results message if no movies match filters
+      if (filteredMovies.length === 0) {
+        noResults.classList.remove('hidden');
+      } else {
+        noResults.classList.add('hidden');
+        filteredMovies.forEach(movie => {
+          const movieElement = createMovieElement(movie);
+          episodesContainer.appendChild(movieElement);
+        });
+      }
+    }
+
+    // Create movie card element
+    function createMovieElement(movie) {
+      const movieElement = document.createElement('div');
+      movieElement.className = 'episode-card bg-gray-800 rounded-xl overflow-hidden transition transform hover:scale-105 hover:shadow-lg relative';
+      
+      // Determine category badge class
+      let categoryClass = '';
+      switch(movie.category) {
+        case 'dc':
+          categoryClass = 'category-dc';
+          break;
+        case 'batman':
+          categoryClass = 'category-batman';
+          break;
+        case 'superman':
+          categoryClass = 'category-superman';
+          break;
+        case 'justice':
+          categoryClass = 'category-justice';
+          break;
+        default:
+          categoryClass = 'category-other';
+      }
+      
+      movieElement.innerHTML = `
+        <div class="relative">
+          <img src="${movie.image}" alt="${movie.title}" class="w-full h-64 object-cover">
+          <div class="play-icon">
+            <i class="fas fa-play"></i>
+          </div>
+        </div>
+        <div class="p-4">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="font-bold text-lg truncate">${movie.title}</h3>
+            <span class="text-blue-400 text-sm font-semibold">${movie.rating}</span>
+          </div>
+          <div class="flex justify-between items-center text-sm text-gray-400 mb-3">
+            <span>${movie.year}</span>
+            <span>${movie.runtime}</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="category-badge ${categoryClass}">${getCategoryName(movie.category)}</span>
+            <button class="text-gray-400 hover:text-white transition">
+              <i class="fas fa-ellipsis-h"></i>
+            </button>
+          </div>
+        </div>
+      `;
+      
+      // Add click event to play video
+      movieElement.addEventListener('click', (e) => {
+        // Don't trigger if clicking on ellipsis button
+        if (!e.target.closest('button')) {
+          const ext = movie.video.split('.').pop().split('?')[0];
+          if (ext === 'mp4') {
+            openModal(movie);
+          } else {
+            // For .txt and .m3u8 links, open in player.html within the page
+            openPlayer(movie);
+          }
+        }
+      });
+      
+      return movieElement;
+    }
+
+    // Open player for non-MP4 videos
+    function openPlayer(movie) {
+      playerIframe.src = `player.html?video=${encodeURIComponent(movie.video)}&title=${encodeURIComponent(movie.title)}`;
+      playerContainer.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Close player
+    function closePlayerHandler() {
+      playerContainer.style.display = 'none';
+      playerIframe.src = '';
+      document.body.style.overflow = '';
+    }
+
+    // Get display name for category
+    function getCategoryName(category) {
+      switch(category) {
+        case 'dc': return 'DC';
+        case 'batman': return 'Batman';
+        case 'superman': return 'Superman';
+        case 'justice': return 'Justice League';
+        default: return 'Other';
+      }
     }
 
     // Open modal with movie details
-    function openModal(movie, episodeNumber) {
+    function openModal(movie) {
       modalTitle.textContent = movie.title;
+      modalRuntime.textContent = movie.runtime;
+      modalRating.textContent = movie.rating;
       modalDescription.textContent = movie.description;
-      episodeNum.textContent = episodeNumber;
-      modalVideo.src = movie.video;
+      modalCast.textContent = movie.cast;
       
+      // Set category badge
+      modalCategory.className = 'category-badge px-2 py-0.5 rounded-full text-xs';
+      switch(movie.category) {
+        case 'dc':
+          modalCategory.classList.add('category-dc');
+          break;
+        case 'batman':
+          modalCategory.classList.add('category-batman');
+          break;
+        case 'superman':
+          modalCategory.classList.add('category-superman');
+          break;
+        case 'justice':
+          modalCategory.classList.add('category-justice');
+          break;
+        default:
+          modalCategory.classList.add('category-other');
+      }
+      modalCategory.textContent = getCategoryName(movie.category);
+      
+      // Set video source
+      modalVideo.src = movie.video;
+      modalVideo.poster = movie.image;
+      
+      // Show modal
       playbackModal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
     }
 
     // Close modal
-    function closeModalHandler() {
+    function closePlaybackModal() {
       playbackModal.classList.add('hidden');
-      modalVideo.pause();
       document.body.style.overflow = '';
+      modalVideo.pause();
     }
 
-    // Event listeners
-    searchBtn.addEventListener('click', () => {
-      searchBar.classList.toggle('hidden');
-    });
-
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('bg-gray-100');
-      document.body.classList.toggle('text-gray-900');
-      document.body.classList.toggle('bg-black');
-      document.body.classList.toggle('text-gray-100');
+    // Setup event listeners
+    function setupEventListeners() {
+      // Search input
+      searchInput.addEventListener('input', (e) => {
+        currentSearch = e.target.value;
+        if (currentSearch) {
+          clearSearch.classList.remove('hidden');
+        } else {
+          clearSearch.classList.add('hidden');
+        }
+        renderMovies();
+      });
       
-      const icon = themeToggle.querySelector('i');
-      if (document.body.classList.contains('bg-black')) {
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-moon');
-      } else {
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
-      }
-    });
+      // Clear search
+      clearSearch.addEventListener('click', () => {
+        searchInput.value = '';
+        currentSearch = '';
+        clearSearch.classList.add('hidden');
+        renderMovies();
+      });
+      
+      // Filter buttons
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          currentFilter = button.dataset.filter;
+          renderMovies();
+        });
+      });
+      
+      // Sort select
+      sortSelect.addEventListener('change', (e) => {
+        currentSort = e.target.value;
+        renderMovies();
+      });
+      
+      // Theme toggle
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-mode');
+        if (document.body.classList.contains('light-mode')) {
+          themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        } else {
+          themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        }
+      });
+      
+      // Search container focus
+      searchInput.addEventListener('focus', () => {
+        searchContainer.classList.add('focused');
+      });
+      
+      searchInput.addEventListener('blur', () => {
+        searchContainer.classList.remove('focused');
+      });
+      
+      // Modal close
+      closeModal.addEventListener('click', closePlaybackModal);
+      playbackModal.addEventListener('click', (e) => {
+        if (e.target === playbackModal) {
+          closePlaybackModal();
+        }
+      });
+      
+      // Player close
+      closePlayer.addEventListener('click', closePlayerHandler);
+      playerContainer.addEventListener('click', (e) => {
+        if (e.target === playerContainer) {
+          closePlayerHandler();
+        }
+      });
+      
+      // Play button in modal
+      playButton.addEventListener('click', () => {
+        if (modalVideo.paused) {
+          modalVideo.play();
+          playButton.innerHTML = '<i class="fas fa-pause mr-2"></i> Pause';
+        } else {
+          modalVideo.pause();
+          playButton.innerHTML = '<i class="fas fa-play mr-2"></i> Play';
+        }
+      });
+      
+      // Video ended event
+      modalVideo.addEventListener('ended', () => {
+        playButton.innerHTML = '<i class="fas fa-play mr-2"></i> Play';
+      });
+    }
 
-    closeModal.addEventListener('click', closeModalHandler);
-    playbackModal.addEventListener('click', function(e) {
-      if (e.target === this) closeModalHandler();
-    });
-
-    // Initialize the page when loaded
-    window.addEventListener('DOMContentLoaded', initPage);
+    // Initialize the app
+    init();
   </script>
 </body>
 </html>
